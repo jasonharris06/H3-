@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+ 
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA="
+        crossorigin="anonymous"></script>
+    <!-- <script src="assets/javascript/game.js"></script> -->
+    <title>Hang Man Rock theme</title>
+</head>
+
+<body style="background-color:black">
+    <div class="jumbotron jumbotron-fluid" style="background-color: black; color:#ffffff">
+        <div class="container">
+            <img src="https://divine-jones.com/jones_proteus_horiz01_large.jpg">
+        
+            
+        </div>
+    </div>
+
+    <!-- game layout -->
+    <div id="container">
+        <div class="row">
+
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-4 styledcolmn">
+            </div>
+            <div class="col-md-4 styledcolmn">
+
+                <div class="row">
+
+                    <div class="col-md">
+                        <h3>Press any key to get started!</h3>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-md">
+                        <h4 id="wins">Wins:</h4>
+                        <h4 id="loses">Loses:</h4>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md">
+                        <h4>Current Word</h4>
+                        <div class="word">
+                        
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md">
+                        <h4>Number of Guesses Remaining:</h4>
+                        
+                        <h4 id="numGuesses">15</h4>
+                        
+                       
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md">
+                        <h4 id="lettersGuessed">Letters already Guessed</h4>
+                       
+                        <div class="guessed">
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-md-2">
+            </div>
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <script>
+
+        $(document).ready(function () {
+
+            var userGuess = [];
+            var wins = 0;
+            var loses = 0;
+            var gamefinish = false;
+            var guesses = 15;
+            var userGuessArray = [];
+            var artistLetters = [];
+            
+            var artist = {
+                artist: ["anberlin", "emery", "radiohead"],
+
+            }
+            
+            
+            var randArtist = artist.artist[Math.floor(Math.random() * artist.artist.length)];
+            
+           
+            //set up dashes
+            
+            for (var i = 0; i < randArtist.length; i++) {
+
+                artistLetters[i] = "_ ";
+
+            }
+             
+            //user letters picked
+            console.log(artistLetters);
+            var newDiv = $("<div>");
+            newDiv.text(artistLetters);
+             $(".word").replaceAll(artistLetters);
+             $(".word").append(artistLetters);
+            
+            
+                
+            document.onkeyup = function (event)
+            {
+                if(gamefinish==true){
+                    $(".word").replaceWith("");
+                    $(".guessed").replaceWith("");
+                    $("#numGuesses").replaceWith("15")
+                    guesses =15;
+                    
+                    gamefinish==false;
+                     randArtist = artist.artist[Math.floor(Math.random() * artist.artist.length)];
+            
+            // Set up game
+           // $("#container").empty();
+            //set up dashes
+            
+            for (var i = 0; i < randArtist.length; i++) {
+
+                artistLetters[i] = "_ ";
+
+            }
+             
+                    
+                }
+                
+                var userGuess = event.key;
+                
+               userGuessArray.push(event.key);
+                
+                //compair user guess against computer picked music artist
+
+
+                for (var i = 0; i < randArtist.length; i++)
+                {
+                    var currentLetter = randArtist.charAt(i);
+
+                   //  console.log(currentLetter);
+
+                    if (userGuess === currentLetter) {
+                       artistLetters.splice(i,1 , userGuess);
+                        console.log(i);
+                        console.log(artistLetters);   
+                    }
+                    else
+                    {
+                    }
+                    
+                   
+                }
+                      
+                userGuessArray.forEach(element => {
+                    
+                       if(element===userGuess)
+                    {
+                        
+                      if( $(".guessed").text().search(element+ " ,")<=0){
+                            $(".guessed").append(userGuess+ " ,");
+                            guesses--;
+                            
+                        }
+                        
+                    }
+     
+                    
+                });
+                        // $(".guessed").append(userGuess+ " ,")
+                    
+                   $("#numGuesses").replaceAll(guesses.toString());
+                   $("#numGuesses").html(guesses.toString());
+                
+
+               
+                rewriteArray(artistLetters);
+               
+            if(randArtist===$(".word").text()){
+                wins++;
+                gamefinish=true;
+                $("#wins").text("Wins: "+wins.toString());
+               
+            }    
+            if(guesses == 0){
+                loses++;
+                gamefinish=true;
+                $("#loses").text("loses: "+loses.toString());
+
+            }
+           
+            }
+            function rewriteArray()
+            {
+                console.log(artistLetters);
+            $(".word").replaceAll(artistLetters);
+            $(".word").html(artistLetters);
+            
+            
+            }
+        
+
+
+        });
+
+    </script>
+
+ 
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
